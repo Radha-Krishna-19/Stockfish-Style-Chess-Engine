@@ -68,8 +68,25 @@ def generate_white_bishop_moves(board):
                         nc += dc
     return moves
 
+def generate_white_rook_moves(board):
+    moves = []
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # up, down, left, right
+    
+    for r in range(8):
+        for c in range(8):
+            if board[r][c] == 'R':  # White rook
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+                    while 0 <= nr < 8 and 0 <= nc < 8:
+                        target = board[nr][nc]
+                        if target == '.':
+                            moves.append(((r, c), (nr, nc)))
+                        elif target.islower():
+                            moves.append(((r, c), (nr, nc)))
+                            break
+                        else:  # Own piece blocking
+                            break
+                        nr += dr
+                        nc += dc
+    return moves
 
-if __name__ == "__main__":
-    moves = generate_white_pawn_moves(board)
-    for move in moves:
-        print(move)
