@@ -30,6 +30,22 @@ def generate_white_pawn_moves(board):
                     moves.append(((r, c), (r-1, c+1)))
     return moves
 
+def generate_white_knight_moves(board):
+    moves = []
+    knight_moves = [(-2, -1), (-2, 1), (-1, -2), (-1, 2),
+                    (1, -2), (1, 2), (2, -1), (2, 1)]
+    
+    for r in range(8):
+        for c in range(8):
+            if board[r][c] == 'N':  # White knight
+                for dr, dc in knight_moves:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < 8 and 0 <= nc < 8:
+                        target = board[nr][nc]
+                        if target == '.' or target.islower():
+                            moves.append(((r, c), (nr, nc)))
+    return moves
+
 if __name__ == "__main__":
     moves = generate_white_pawn_moves(board)
     for move in moves:
