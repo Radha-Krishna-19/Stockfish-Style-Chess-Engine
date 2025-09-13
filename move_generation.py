@@ -90,3 +90,44 @@ def generate_white_rook_moves(board):
                         nc += dc
     return moves
 
+def generate_white_queen_moves(board):
+    moves = []
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1),  # Rook-like directions
+                  (-1, -1), (-1, 1), (1, -1), (1, 1)]  # Bishop-like directions
+    
+    for r in range(8):
+        for c in range(8):
+            if board[r][c] == 'Q':  # White queen
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+                    while 0 <= nr < 8 and 0 <= nc < 8:
+                        target = board[nr][nc]
+                        if target == '.':
+                            moves.append(((r, c), (nr, nc)))
+                        elif target.islower():
+                            moves.append(((r, c), (nr, nc)))
+                            break
+                        else:
+                            break
+                        nr += dr
+                        nc += dc
+    return moves
+
+
+def generate_white_king_moves(board):
+    moves = []
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1),
+                  (-1, -1), (-1, 1), (1, -1), (1, 1)]
+    
+    for r in range(8):
+        for c in range(8):
+            if board[r][c] == 'K':  # White king
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < 8 and 0 <= nc < 8:
+                        target = board[nr][nc]
+                        if target == '.' or target.islower():
+                            moves.append(((r, c), (nr, nc)))
+    return moves
+
+
