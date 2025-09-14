@@ -474,3 +474,46 @@ def generate_black_pawn_en_passant(board, en_passant_target):
                 if r == 4 and abs(c - ec) == 1 and er == 5:
                     moves.append(((r, c), (er, ec)))
     return moves
+
+def generate_all_moves(board, state):
+    """
+    Generate all legal moves for the side to move.
+    Combines all individual piece move generators.
+    Returns list of moves in ((from_row, from_col), (to_row, to_col)) or ((from_row, from_col), (to_row, to_col), promotion)
+    """
+    side = state['side_to_move']
+    moves = []
+
+    if side == 'white':
+        moves.extend(generate_white_pawn_moves(board))
+        moves.extend(generate_white_knight_moves(board))
+        moves.extend(generate_white_bishop_moves(board))
+        moves.extend(generate_white_rook_moves(board))
+        moves.extend(generate_white_queen_moves(board))
+        moves.extend(generate_white_king_moves(board))
+        # Promotion moves
+        moves.extend(generate_white_pawn_moves_with_promotion(board))
+        # Castling
+        if 'castling_rights' in state:
+            moves.extend(generate_white_castling_moves(board, state['castling_rights']))
+        # En passant
+        if 'en_passant' in state and state['en_passant'] is not None:
+            moves.extend(generate_white_pawn_en_passant(board, state['en_passant']))
+    else:
+        moves.extend(generate_black_pawn_moves(board))
+        moves.extend(generate_black_knight_moves(board))
+        moves.extend(generate_black_bishop_moves(board))
+        moves.extend(generate_black_rook_moves(board))
+        moves.extend(generate_black_queen_moves(board))
+        moves.extend(generate_black_king_moves(board))
+        # Promotion moves
+        moves.extend(generate_black_pawn_moves_with_promotion(board))
+        # Castling
+        if 'castling_rights' in state:
+            moves.extend(generate_black_castling_moves(board, state['castling_rights']))
+        # En passant
+        if 'en_passant' in state and state['en_passant'] is not None:
+            moves.extend(generate_black_pawn_en_passant(board, state['en_passant']))
+
+    # Note: You may need to add legality filtering for king-in-check
+    return moves
